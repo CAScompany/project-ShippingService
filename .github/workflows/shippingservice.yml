@@ -17,13 +17,10 @@ jobs:
       run:
         working-directory: shipping-service-example
     
-   
-
     steps:
       - name: Code checkout 
         uses: actions/checkout@v4
 
-      
       - name: test maven
         run: mvn clean test install
 
@@ -105,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: reporte-postman-paymant-service
-          path: ./shipping-service/testArtifacts
+          path: ./shipping-service-example/testArtifacts
 
       - name: Detener la app
         run: |
@@ -116,3 +113,61 @@ jobs:
           else
             echo "Spring Boot App not running."
           fi
+
+  Release:
+    needs:  FUNCTIONAL_TESTING
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.CODE_DIR }}
+    steps:
+      - name: Code checkout 
+        uses: actions/checkout@v4
+      - name: Build JAR
+        run: mvn install -B
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_RELEASE }}
+        with:
+          tag_name: v${{github.run_number}}
+          release_name: payments-service
+          body: payments-service v${{github.run_number}}
+          draft: false
+          prerelease: false 
+      
+      - name: Upload JAR to Release          
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_RELEASE }}
+    
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.CODE_DIR }}/target/shipping-service-example-0.0.1-SNAPSHOT.jar
+          asset_name: shipping-service.jar
+          asset_content_type: application/java-archive
+
+  BUILD_AND_PUBLISH:
+    needs:  Release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.CODE_DIR }}
+    steps:
+      - name: Code checkout 
+        uses: actions/checkout@v4
+    
+      - name: upload image to ECR
+        uses: appleboy/docker-ecr-action@master        
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR}}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR}}
+          registry: ${{ secrets.registry }}
+          repo: ${{env.ECR_REPOSITORY}}
+          region: ${{env.AWS_REGION}}
+          tags: shipping-service-v${{github.run_number}}
+          daemon_off: false
+          dockerfile: ./Dockerfile
+          context: ./
