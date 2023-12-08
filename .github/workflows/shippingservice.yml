@@ -16,15 +16,20 @@ jobs:
     defaults:
       run:
         working-directory: shipping-service
+      
+    steps: 
 
-    steps:
-      - name: Code checkout 
-        uses: actions/checkout@v4
+        - name: PWD
+          run: |
+            pwd
 
-      - name: List Files
-        run: |
-          tree   
+     
 
+    # steps:
+    #   - name: Code checkout 
+    #     uses: actions/checkout@v4
+
+      
   #     - name: test maven
   #       run: mvn clean test install
 
