@@ -64,10 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./shipping-service
+        working-directory: ./
     steps:
       - name: Code checkout 
         uses: actions/checkout@v4
+ 
 
       - name: test maven
         run: mvn clean test install
