@@ -15,13 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: shipping-service
+        working-directory: project-ShippingService/project-ShippingService/shipping-service
       
-    steps: 
-
-        - name: PWD
-          run: |
-            pwd
+    steps:
+      - name: PWD
+        run: |
+          pwd
 
      
 
