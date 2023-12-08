@@ -16,108 +16,103 @@ jobs:
     defaults:
       run:
         working-directory: .
-    steps:
-      - name: PWD
-        run: |
-          pwd
-          tree
-
+    
    
 
-    # steps:
-    #   - name: Code checkout 
-    #     uses: actions/checkout@v4
+    steps:
+      - name: Code checkout 
+        uses: actions/checkout@v4
 
       
-  #     - name: test maven
-  #       run: mvn clean test install
+      - name: test maven
+        run: mvn clean test install
 
-  #     - name: Set up JDK 11
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         distribution: 'temurin' 
-  #         java-version: '11'   
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' 
+          java-version: '11'   
 
-  #     - name: Analyze with SonarCloud
-  #       uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #       with:
-  #         args:
-  #           -Dsonar.projectKey=CAScompany_project-ShippingService
-  #           -Dsonar.organization=cascompany
-  #           -Dsonar.java.binaries=**/target/classes
-  #           -Dsonar.sources=.
-  #           -Dsonar.junit.reportsPath=target/surefire-reports/
-  #           -Dsonar.junit.reportsPath=target/checckstyle-result.xml
-  #           -Dsonar.jacoco.reportsPathtarjet/jacoco.exec
-  #           -Dsonar.java.checkstyle.reportPath=target/checkstyle-result.xml
+      - name: Analyze with SonarCloud
+        uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args:
+            -Dsonar.projectKey=CAScompany_project-ShippingService
+            -Dsonar.organization=cascompany
+            -Dsonar.java.binaries=**/target/classes
+            -Dsonar.sources=.
+            -Dsonar.junit.reportsPath=target/surefire-reports/
+            -Dsonar.junit.reportsPath=target/checckstyle-result.xml
+            -Dsonar.jacoco.reportsPathtarjet/jacoco.exec
+            -Dsonar.java.checkstyle.reportPath=target/checkstyle-result.xml
 
-  #     - name: Revisar archivos
-  #       run:  tree
+      - name: Revisar archivos
+        run:  tree
 
-  #     - name: SonarQube Quality Gate check
-  #       id: sonarqube-quality-gate-check
-  #       uses: sonarsource/sonarqube-quality-gate-action@master
-  #       with:
-  #         scanMetadataReportFile: ./.scannerwork/report-task.txt
-  #       # Force to fail step after specific time. $GITHUB_WORKSPACE
-  #       timeout-minutes: 5
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        with:
+          scanMetadataReportFile: ./.scannerwork/report-task.txt
+        # Force to fail step after specific time. $GITHUB_WORKSPACE
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # FUNCTIONAL_TESTING:
-  #   # needs: Analysis
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: shipping-service  
-  #   steps:
-  #     - name: Code checkout 
-  #       uses: actions/checkout@v4
+  FUNCTIONAL_TESTING:
+    # needs: Analysis
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: shipping-service  
+    steps:
+      - name: Code checkout 
+        uses: actions/checkout@v4
 
-  #     - name: test maven
-  #       run: mvn clean test install
+      - name: test maven
+        run: mvn clean test install
 
-  #     - name: Set up JDK 11
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         distribution: 'temurin' 
-  #         java-version: '11'
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' 
+          java-version: '11'
 
-  #     - name: Correr App
-  #       run: mvn spring-boot:run & sleep 5
+      - name: Correr App
+        run: mvn spring-boot:run & sleep 5
 
-  #     - name: Instalar Node.js y npm
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20'
+      - name: Instalar Node.js y npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-  #     - name: Instalar Newman
-  #       run: |
-  #         npm install -g newman@latest
-  #         npm install -g newman-reporter-htmlextra
+      - name: Instalar Newman
+        run: |
+          npm install -g newman@latest
+          npm install -g newman-reporter-htmlextra
 
-  #     - name: Ejecutar pruebas funcionales con Newman
-  #       run: |
-  #         newman run collection.json -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html
+      - name: Ejecutar pruebas funcionales con Newman
+        run: |
+          newman run collection.json -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html
           
-  #     - name: Revisar archivos 
-  #       run: tree
+      - name: Revisar archivos 
+        run: tree
 
-  #     - name: Almacenar reporte como artefacto
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: reporte-postman-paymant-service
-  #         path: ./shipping-service/testArtifacts
+      - name: Almacenar reporte como artefacto
+        uses: actions/upload-artifact@v3
+        with:
+          name: reporte-postman-paymant-service
+          path: ./shipping-service/testArtifacts
 
-  #     - name: Detener la app
-  #       run: |
-  #         PID=$(ps aux | grep 'spring-boot:run' | grep -v grep | awk '{print $2}')
-  #         if [ -n "$PID" ]; then
-  #           echo "Stopping Spring Boot App with PID $PID"
-  #           kill -9 $PID
-  #         else
-  #           echo "Spring Boot App not running."
-  #         fi
+      - name: Detener la app
+        run: |
+          PID=$(ps aux | grep 'spring-boot:run' | grep -v grep | awk '{print $2}')
+          if [ -n "$PID" ]; then
+            echo "Stopping Spring Boot App with PID $PID"
+            kill -9 $PID
+          else
+            echo "Spring Boot App not running."
+          fi
