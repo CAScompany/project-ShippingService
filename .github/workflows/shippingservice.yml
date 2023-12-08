@@ -60,15 +60,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   FUNCTIONAL_TESTING:
-    #  needs: Analysis
+    # needs: Analysis
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./
+        working-directory: shipping-service  
     steps:
       - name: Code checkout 
         uses: actions/checkout@v4
- 
 
       - name: test maven
         run: mvn clean test install
@@ -82,7 +81,6 @@ jobs:
       - name: Correr App
         run: mvn spring-boot:run & sleep 5
 
-      
       - name: Instalar Node.js y npm
         uses: actions/setup-node@v4
         with:
@@ -92,7 +90,6 @@ jobs:
         run: |
           npm install -g newman@latest
           npm install -g newman-reporter-htmlextra
-        
 
       - name: Ejecutar pruebas funcionales con Newman
         run: |
