@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: shipping-service
+        working-directory: **shipping-service
     steps:
       - name: Code checkout 
         uses: actions/checkout@v4
