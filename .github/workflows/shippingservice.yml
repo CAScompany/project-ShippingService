@@ -15,14 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: project-ShippingService/project-ShippingService/shipping-service
-      
-    steps:
-      - name: PWD
-        run: |
-          pwd
+        working-directory: project-ShippingService/ 
+        
+   steps:
+    - name: PWD
+      run: |
+        pwd
+        tree
 
-     
+   
 
     # steps:
     #   - name: Code checkout 
