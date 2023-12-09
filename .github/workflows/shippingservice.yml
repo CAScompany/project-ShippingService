@@ -177,7 +177,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
       - name: Debug secrets
         run: |
-         echo "REGISTRY starts with: ${${{ secrets.REGISTRY }}:0:4}"
+         echo "REGISTRY equals  ${${{ secrets.REGISTRY }}"
          echo "ECR_REPOSITORY starts with: ${${{ secrets.ECR_REPOSITORY }}:0:4}"
           
       - name: Set up Docker Buildx
