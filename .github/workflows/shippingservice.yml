@@ -9,6 +9,8 @@ on:
 
 env:
   CODE_DIR: shipping-service-example
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: proyecto-ort-rep
 
 permissions:
   pull-requests: read
@@ -169,6 +171,9 @@ jobs:
               - name: Login to Amazon ECR
                 id: AKIA6GZOL5YSITE7Q66Q
                 uses: aws-actions/amazon-ecr-login@v1
+                with:
+                  mask-password: true  
+                    
         
               - name: Build, tag, and push image to Amazon ECR
                 id: build-image
@@ -177,6 +182,6 @@ jobs:
                   context: .
                   file: ./Dockerfile
                   push: true
-                  tags: shipping-service-v${{github.run_number}} 
+                  tags: ${{ env.ECR_REPOSITORY }}/shipping-service-v${{github.run_number}}
                     
         
