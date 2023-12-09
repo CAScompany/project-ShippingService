@@ -175,6 +175,8 @@ jobs:
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
+          REGISTRY: 976665439780.dkr.ecr.us-east-1.amazonaws.com
+
                        
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2    
@@ -185,4 +187,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.ECR_REPOSITORY }}
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.ECR_REPOSITORY }}/shipping-servicev${{github.run_number}}
