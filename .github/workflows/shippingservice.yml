@@ -173,4 +173,4 @@ jobs:
           tags: shipping-service-v${{github.run_number}}
           daemon_off: false
           dockerfile: ./Dockerfile
-          context: shipping-service
+          context: ./shipping-service-example
