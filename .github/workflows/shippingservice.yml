@@ -185,4 +185,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.ECR_REPOSITORY }}/shipping-servicev${{github.run_number}}
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.ECR_REPOSITORY }}
