@@ -154,25 +154,35 @@ jobs:
   #         asset_name: shipping-service.jar
   #         asset_content_type: application/java-archive
 
- BUILD_AND_PUBLISH:
- # needs:  Release
-  runs-on: ubuntu-latest
-  defaults:
-    run:
-      working-directory: ${{ env.CODE_DIR }}
-  steps:
-    - name: Code checkout 
-      uses: actions/checkout@v4
-
-    - name: upload image to ECR
-      uses: appleboy/docker-ecr-action@master        
-      with:
-        access_key: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR}}
-        secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR}}
-        registry: ${{ secrets.registry }}
-        repo: ${{secrets.ECR_REPOSITORY}}
-        region: ${{env.AWS_REGION}}
-        tags: shipping-service-v${{github.run_number}}
-        daemon_off: false
-        dockerfile: ./Dockerfile
-        context: ./
+  BUILD_AND_PUBLISH:
+    #needs: Release
+    runs-on: ubuntu-latest
+    container:
+      image: docker:20.10.7
+    defaults:
+      run:
+        working-directory: ${{ env.CODE_DIR }}
+    
+    steps:
+      - name: Code checkout 
+        uses: actions/checkout@v3
+      - name: Login to Amazon ECR
+        id: shipping
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: true  
+        env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
+      
+                           
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1    
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.registry }}/${{ secrets.ECR_REPOSITORY }}/shippingv${{github.run_number}}
