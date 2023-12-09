@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-    CODE_DIR: ./shipping-service
+    CODE_DIR: ./shipping-service-example
 
 permissions:
   pull-requests: read
@@ -173,4 +173,4 @@ jobs:
           tags: shipping-service-v${{github.run_number}}
           daemon_off: false
           dockerfile: ./Dockerfile
-          context: ./
+          context: shipping-service
