@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-    CODE_DIR: ./shipping-service-example
+    CODE_DIR: ./shipping-service
 
 permissions:
   pull-requests: read
