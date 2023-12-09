@@ -10,7 +10,7 @@ on:
 env:
   CODE_DIR: shipping-service-example
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: proyecto-ort-rep
+  ECR_REPOSITORY: proyecto-ort-repo
 
 permissions:
   pull-requests: read
