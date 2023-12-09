@@ -175,10 +175,7 @@ jobs:
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
-      - name: Debug secrets
-        run: |
-          echo "REGISTRY is: ${{ secrets.REGISTRY }}"
-                 
+                       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1    
       - name: Build, tag, and push image to Amazon ECR
@@ -188,4 +185,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.REGISTRY }}/${{ secrets.ECR_REPOSITORY }}/shippingv${{github.run_number}}
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.ECR_REPOSITORY }}/shipping-servicev${{github.run_number}}
