@@ -168,13 +168,14 @@ jobs:
       - name: Code checkout 
         uses: actions/checkout@v3
       - name: Login to Amazon ECR
-        id: AKIA6GZOL5YSITE7Q66Q
+        id: shipping
         uses: aws-actions/amazon-ecr-login@v1
         with:
           mask-password: true  
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
+          
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1    
       - name: Build, tag, and push image to Amazon ECR
@@ -184,4 +185,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.ECR_REPOSITORY }}/shipping-service-v${{github.run_number}}
+          tags: ${{ secrets.REGISTRY }}/${{ secrets.ECR_REPOSITORY }}/shipping-service-v${{github.run_number}}
