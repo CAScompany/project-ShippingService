@@ -166,6 +166,16 @@ jobs:
        - name: Code checkout 
          uses: actions/checkout@v4
    
+       - name: Configurar credenciales de AWS
+         uses: aws-actions/configure-aws-credentials@v1
+         with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
+           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+           aws-region: ${{ env.AWS_REGION }}
+
+
+
        - name: upload image to ECR
          uses: appleboy/docker-ecr-action@master        
          with:
