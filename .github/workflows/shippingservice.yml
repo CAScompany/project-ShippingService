@@ -166,10 +166,23 @@ jobs:
        - name: Code checkout 
          uses: actions/checkout@v4
    
-       - name: Authenticate with Amazon ECR
-         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.registry }}
+       - name: Setup AWS creds
+         uses: aws-actions/configure-aws-credentials@v4
+         with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
+           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+           aws-region: ${{ secrets.AWS_REGION }}
+
+
+
+       - name: upload image to ECR
+         uses: appleboy/docker-ecr-action@master        
+         with:
+           registry: ${{ secrets.registry }}
+           repo: ${{secrets.ECR_REPOSITORY}}
+           tags: shipping-service-v${{github.run_number}}
+           daemon_off: false
+           dockerfile: ./Dockerfile
+           context: ./
    
-       - name: Build and push Docker image
-         run: |
-           docker build -t ${{ secrets.registry }}/${{ secrets.ECR_REPOSITORY }}:shipping-service-v${{ github.run_number }} -f ./Dockerfile .
-           docker push ${{ secrets.registry }}/${{ secrets.ECR_REPOSITORY }}:shipping-service-v${{ github.run_number }}
