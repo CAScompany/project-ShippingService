@@ -166,23 +166,19 @@ jobs:
        - name: Code checkout 
          uses: actions/checkout@v3
    
-       - name: Setup AWS creds
-         uses: aws-actions/configure-aws-credentials@v3
-         with:
-           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-           aws-region: ${{ secrets.AWS_REGION }}
-
+      
 
 
        - name: upload image to ECR
          uses: appleboy/docker-ecr-action@master        
          with:
-           registry: ${{ secrets.REGISTRY }}
-           repo: ${{secrets.ECR_REPOSITORY}}
-           tags: shipping-service-v${{github.run_number}}
-           daemon_off: false
-           dockerfile: ./Dockerfile
-           context: ./
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}          
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          registry: ${{ secrets.REGISTRY }}
+          repo: ${{secrets.ECR_REPOSITORY}}
+          region: ${{ secrets.AWS_REGION }}
+          tags: shipping-service-v${{github.run_number}}
+          daemon_off: false
+          dockerfile: ./Dockerfile
+          context: ./
    
