@@ -185,7 +185,7 @@ jobs:
               with:
                 registry: ${{ secrets.REGISTRY }}
                 repo: ${{secrets.ECR_REPOSITORY}}
-                tags: payment-service-v${{github.run_number}}
+                tags: shipping-service-v${{github.run_number}}
                 daemon_off: false
                 dockerfile: ./Dockerfile
                 context: ./
