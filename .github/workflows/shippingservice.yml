@@ -156,7 +156,7 @@ jobs:
           asset_name: shipping-service.jar
           asset_content_type: application/java-archive
 
-    BUILD_AND_PUBLISH:
+   BUILD_AND_PUBLISH:
           needs:  Release
           runs-on: ubuntu-latest
           defaults:
