@@ -173,8 +173,8 @@ jobs:
             - name: Setup AWS creds
               uses: aws-actions/configure-aws-credentials@v4
               with:
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
                 aws-region: ${{ secrets.AWS_REGION }}
       
@@ -183,7 +183,7 @@ jobs:
             - name: upload image to ECR
               uses: appleboy/docker-ecr-action@master        
               with:
-                registry: ${{ secrets.registry }}
+                registry: ${{ secrets.REGISTRY }}
                 repo: ${{secrets.ECR_REPOSITORY}}
                 tags: payment-service-v${{github.run_number}}
                 daemon_off: false
