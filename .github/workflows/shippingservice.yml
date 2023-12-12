@@ -9,7 +9,7 @@ on:
 
 env:
   CODE_DIR: shipping-service-example
-  AWS_REGION: us-east-1
+ 
 
 permissions:
   pull-requests: read
@@ -157,22 +157,22 @@ jobs:
   #         asset_content_type: application/java-archive
 
   BUILD_AND_PUBLISH:
-     #needs:  Release
-     runs-on: ubuntu-latest
-     defaults:
+ #   needs:  Release
+    runs-on: ubuntu-latest
+    defaults:
        run:
          working-directory: ${{ env.CODE_DIR }}
-     steps:
+    steps:
        - name: Code checkout 
          uses: actions/checkout@v4
    
-       - name: Configurar credenciales de AWS
+       - name: Setup AWS creds
          uses: aws-actions/configure-aws-credentials@v1
          with:
            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PERSONAL_ECR }}
            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PERSONAL_ECR }}
            aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-           aws-region: ${{ env.AWS_REGION }}
+           aws-region: ${{ secrets.AWS_REGION }}
 
 
 
