@@ -191,6 +191,6 @@ jobs:
            ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
            IMAGE_TAG: shipping-service-v${{github.run_number}}
          run: |
-           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./project-ShippingService
+           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
        
