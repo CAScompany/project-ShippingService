@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "paymentid",
-    "name": "payment-service collection",
+    "_postman_id": "shippingid",
+    "name": "shipping-service collection",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -15,11 +15,11 @@
           "raw": ""
         },
         "url": {
-          "raw": "http://localhost:8080/payments/50",
+          "raw": "http://localhost:8080/shipping/50",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8080",
-          "path": ["payments", "50"]
+          "path": ["shipping", "50"]
         }
       },
       "response": [],
