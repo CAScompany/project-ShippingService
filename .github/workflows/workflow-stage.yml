@@ -26,4 +26,5 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       REGISTRY: ${{ secrets.REGISTRY }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-      TOKEN_RELEASE: ${{ secrets.TOKEN_RELEASE }}   
+      TOKEN_RELEASE: ${{ secrets.TOKEN_RELEASE }}
+      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}  
