@@ -1,35 +1,17 @@
-name: Shipping-Service
+name: SonarCloud analysis
+
 on:
-  workflow_call:
-    inputs:
-      CI_ENV:
-        required: true
-        type: string
-      CONTENTFUL_ENVIRONMENT:
-        required: true
-        type: string
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
-      AWS_REGION:
-        required: true
-      AWS_SESSION_TOKEN:
-        required: true
-      REGISTRY:
-        required: true
-      ECR_REPOSITORY:
-        required: true          
-      SONAR_TOKEN:
-        required: true
-      TOKEN_RELEASE:
-        required: true 
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 env:
   CODE_DIR: shipping-service-example
+ 
 
-  permissions:
+permissions:
   pull-requests: read
 
 jobs:
@@ -116,7 +98,7 @@ jobs:
 
       - name: Run functional tests with Newman
         run: |
-          newman run .././.github/Postman/collection.json -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html
+          newman run collection.json -r cli,htmlextra --reporter-htmlextra-export testArtifacts/htmlreport.html
           
       - name: Check files
         run: tree
@@ -124,7 +106,7 @@ jobs:
       - name: Store report as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: postman-report-shipping-service-${{ inputs.CI_ENV }}
+          name: postman-report-shipping-service
           path: ./shipping-service-example/testArtifacts
 
       - name: Stop the app
@@ -157,8 +139,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_RELEASE }}
         with:
-          tag_name: v${{github.run_number}}-${{ inputs.CI_ENV }}
-          release_name: payments-service-${{ inputs.CI_ENV }}
+          tag_name: v${{ github.run_number }}
+          release_name: payments-service
           body: "payments-service v${{ github.run_number }}"
           draft: false
           prerelease: false 
@@ -203,7 +185,7 @@ jobs:
               with:
                 registry: ${{ secrets.REGISTRY }}
                 repo: ${{secrets.ECR_REPOSITORY}}
-                tags: shipping-service-${{ inputs.CI_ENV }}.v${{ github.run_number }}
+                tags: shipping-service-v${{github.run_number}}
                 daemon_off: false
                 dockerfile: ./Dockerfile
                 context: ./

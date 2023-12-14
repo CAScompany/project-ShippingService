@@ -1,0 +1,29 @@
+name: Github Action Workflow STAGE
+on:
+  push:
+    branches:
+    - test
+  repository_dispatch:
+    types:
+      - build-staging
+  workflow_dispatch:
+
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-staging:
+    uses: CAScompany/project-ShippingService/.github/workflows/shippingservice.yml@test
+    with:
+      CI_ENV: test
+      CONTENTFUL_ENVIRONMENT: 'test'
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN}}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      REGISTRY: ${{ secrets.REGISTRY }}
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      TOKEN_RELEASE: ${{ secrets.TOKEN_RELEASE }}   
