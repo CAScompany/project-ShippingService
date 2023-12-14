@@ -28,3 +28,4 @@ jobs:
       REGISTRY: ${{ secrets.REGISTRY }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       TOKEN_RELEASE: ${{ secrets.TOKEN_RELEASE }}
+      ##
