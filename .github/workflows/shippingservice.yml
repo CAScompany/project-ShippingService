@@ -90,7 +90,7 @@ jobs:
           status: ${{ job.status }}
           steps: ${{toJson(steps)}}
           channel: '#proyecto-ort'
-          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
+          message: Proyecto-Shipping ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -156,7 +156,7 @@ jobs:
           status: ${{ job.status }}
           steps: ${{toJson(steps)}}
           channel: '#proyecto-ort'
-          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
+          message: Proyecto-Shipping ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -202,7 +202,7 @@ jobs:
           status: ${{ job.status }}
           steps: ${{toJson(steps)}}
           channel: '#proyecto-ort'
-          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
+          message: Proyecto-Shipping ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -234,7 +234,9 @@ jobs:
         with:
           registry: ${{ secrets.REGISTRY }}
           repo: ${{secrets.ECR_REPOSITORY}}
-          tags: shipping-service-${{ inputs.CI_ENV }}.v${{ github.run_number }}
+          region: ${{secrets.AWS_REGION}}
+          tags: shipping-service-v${{ github.run_number }},${{ inputs.CI_ENV }}           
+#          tags: shipping-service-${{ inputs.CI_ENV }}.v${{ github.run_number }}
           daemon_off: false
           dockerfile: ./Dockerfile
           context: ./
@@ -245,7 +247,7 @@ jobs:
           status: ${{ job.status }}
           steps: ${{toJson(steps)}}
           channel: '#proyecto-ort'
-          message: Proyecto-Frontend ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
+          message: Proyecto-Shipping ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -288,3 +290,14 @@ jobs:
           namespace: production
           values: appimage=${{secrets.REGISTRY}}/${{secrets.ECR_REPOSITORY}},apptag=shipping-service-${{ inputs.CI_ENV }}.v${{ github.run_number }}
           name: shipping-service
+
+      - name: Slack Notification
+        uses: act10ns/slack@v1
+        with: 
+          status: ${{ job.status }}
+          steps: ${{toJson(steps)}}
+          channel: '#proyecto-ort'
+          message: Proyecto-Shipping ${{ github.job}} en ${{ inputs.CI_ENV }} branch fue ${{ job.status }}
+        if: always() 
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
