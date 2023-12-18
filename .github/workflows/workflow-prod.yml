@@ -27,5 +27,6 @@ jobs:
       REGISTRY: ${{ secrets.REGISTRY }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       TOKEN_RELEASE: ${{ secrets.TOKEN_RELEASE }}
-      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}       
+      SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+      EKS_CLUSTER: ${{secrets.EKS_CLUSTER}}       
       ###

@@ -27,6 +27,8 @@ on:
         required: true 
       SLACK_WEBHOOK_URL:
         required: true
+      EKS_CLUSTER:
+        required: true  
 env:
   CODE_DIR: shipping-service-example
 
@@ -247,3 +249,42 @@ jobs:
         if: always() 
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  Deploy-EKS:
+    needs: BUILD_AND_PUBLISH
+    runs-on: ubuntu-latest
+    defaults:
+      run: 
+        shell: bash
+        working-directory: ./.github/EKS/
+
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup AWS creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install and configure kubectl
+        run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER }}
+
+      - name: Login to ECR
+        run: kubectl create secret docker-registry regcred --docker-server ${{secrets.REGISTRY}} --docker-password=$(aws ecr get-login-password)
+
+      - name: Deploy Helm
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.8
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          cluster-name: ${{ secrets.EKS_CLUSTER }}
+#          config-files: .github/values/dev.yaml
+          chart-path: ./shippingcharts
+          namespace: production
+          values: appimage=${{secrets.REGISTRY}}/${{secrets.ECR_REPOSITORY}},apptag=shipping-service-${{ inputs.CI_ENV }}.v${{ github.run_number }}
+          name: shipping-service
