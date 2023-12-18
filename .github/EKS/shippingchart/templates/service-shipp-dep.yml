@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: shipping-service
+  name: shipping-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: shipping-service
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: shipping-service
+    spec:
+      containers:
+      - image: {{ .Values.appimage}}:{{ .Values.apptag}}
+        name: shipping-service
+        ports: 
+        - containerPort: 8080
+          name: shipping-port
+      #   volumeMounts:
+      #   - name: persistent-storage
+      #     mountPath: "/var/shipping-servicemnt"
+      # volumes:
+      # - name: persistent-storage
+      #   persistentVolumeClaim:
+      #     claimName: pvc-efs
